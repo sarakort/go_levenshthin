@@ -16,8 +16,8 @@ type EditDistance struct{
 type CalcDistance interface {
 	Dimension()  [][]int
 	Distance()  int
-	Match(r1 , r2 rune) int 
-	MinCost(n []int) int
+	MatchCost(r1 , r2 rune) int 
+	MinCost(i ,j , cost int) int
 	Print()
 }
 
@@ -46,17 +46,17 @@ func (e EditDistance) Dimension() [][]int {
 	return   tmp
 }
 
-func (e EditDistance) MinCost(i,j, edit int) int {
+func (e EditDistance) MinCost(i,j, cost int) int {
 	// fmt.Printf("i: %d, j: %d , edit: %d", i,j, edit)
 	v := []int {
 		e.dimension[i][j+1] +1 , // delete / insert from str1
 		e.dimension[i+1][j] +1,  // delete / insert from str2
-		e.dimension[i][j] + edit, // delete /insert from both
+		e.dimension[i][j] + cost, // delete /insert from both
 	}
 	return min(v)
 }
 
-func (e EditDistance) Match(r1, r2 rune) int{
+func (e EditDistance) MatchCost(r1, r2 rune) int{
 	// fmt.Printf("%s(%d),%s(%d) \n" , string(r1), unicode.ToLower(r1), string(r2), unicode.ToLower(r2))
 	if unicode.ToLower(r1) == unicode.ToLower(r2) {
 		return 0
@@ -76,8 +76,8 @@ func (e EditDistance) Distance() int {
 	fmt.Println(r2)
 	for i := 0 ; i < str1Len ; i++{
 		for j:= 0 ; j < str2Len ; j++ {
-			edit := e.Match(r1[i], r2[j])
-			e.dimension[i+1][j+1] = e.MinCost(i, j , edit )
+			cost := e.MatchCost(r1[i], r2[j])
+			e.dimension[i+1][j+1] = e.MinCost(i, j , cost)
 		}
 	}
 	// fmt.Println(e.dimension)
