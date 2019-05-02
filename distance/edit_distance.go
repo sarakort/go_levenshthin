@@ -4,6 +4,7 @@ import (
 	"strings"
 	"unicode"
 	"fmt"
+	"github.com/fatih/color"
 )
 
 type EditDistance struct{
@@ -72,22 +73,56 @@ func (e EditDistance) Distance() int {
 	}
 	r1 := []rune(strings.ToLower(e.StrFirst))
 	r2 := []rune(strings.ToLower(e.StrSecond))
-	fmt.Println(r1)
-	fmt.Println(r2)
+	// fmt.Println(r1)
+	// fmt.Println(r2)
 	for i := 0 ; i < str1Len ; i++{
 		for j:= 0 ; j < str2Len ; j++ {
 			cost := e.MatchCost(r1[i], r2[j])
 			e.dimension[i+1][j+1] = e.MinCost(i, j , cost)
 		}
 	}
-	// fmt.Println(e.dimension)
-
 	return e.dimension[str1Len][str2Len]
 }
 
 func (e EditDistance) Print() {
-	for i:= range e.dimension {
-		fmt.Println(e.dimension[i])
+	cols := strings.Split(" "+e.StrSecond, "")
+	row := strings.Split(" "+e.StrFirst, "")
+	
+	blue := color.New(color.FgBlue , color.Bold)	
+	green := color.New(color.FgGreen)
+	red := color.New(color.FgRed, color.Bold).Add(color.BgWhite)
+
+	write := color.New(color.FgWhite)
+	fmt.Print(" ")
+	blue.Printf("%v\n",cols)
+	
+	dim := e.Dimension()
+	for i:= range dim {
+		blue.Print(row[i])
+		if( i == 0 ){
+			green.Printf("%v\n", dim[i])
+		}else{
+			arrcol := dim[i]
+
+			var printcolor *color.Color
+			if i == len(dim)-1{
+				printcolor = red
+			}else{
+				printcolor = write
+			}
+
+			for j := range arrcol{
+				switch j {
+				case 0 : 
+					green.Printf("[%d ", arrcol[j])
+				case len(arrcol) -1 :
+					printcolor.Printf("%d", arrcol[j])
+					fmt.Println("]") 
+				default : 
+					fmt.Printf("%d ",arrcol[j])
+				}
+			}
+		}
 	}
 }
 
