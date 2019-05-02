@@ -1,7 +1,9 @@
 package distance
 
+
 func Make2Dim(rows , columns int ) [][]int{
 	// use number of row to determine the size
+	// fmt.Printf("\nrow: %d, column: %d\n", rows, columns)
 	dim := make([][]int, rows) 
 	firstRow := 0
 	firstColumn := 0
