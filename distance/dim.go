@@ -1,6 +1,5 @@
 package distance
 
-
 func Make2Dim(rows , columns int ) [][]int{
 	// use number of row to determine the size
 	// fmt.Printf("\nrow: %d, column: %d\n", rows, columns)
@@ -28,8 +27,6 @@ func initDistancePostion(nums int) []int{
 	}
 	return n
 }
-
-
 
 func min(n []int) int {
 	m := 0

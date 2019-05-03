@@ -38,7 +38,6 @@ func (e *EditDistance) MinCost(i,j, cost int) int {
 }
 
 func (e EditDistance) MatchCost(r1, r2 rune) int{
-	// fmt.Printf("%s(%d),%s(%d) \n" , string(r1), unicode.ToLower(r1), string(r2), unicode.ToLower(r2))
 	if r1 == r2 {
 		return 0
 	}
@@ -46,10 +45,12 @@ func (e EditDistance) MatchCost(r1, r2 rune) int{
 }
 
 func (e *EditDistance) Distance() int {
-	r1 := []rune(strings.ToLower(e.StrFirst))
-	r2 := []rune(strings.ToLower(e.StrSecond))
-	str1Len := len(r1)
-	str2Len := len(r2)
+	var (
+		r1 = []rune(strings.ToLower(e.StrFirst))
+		r2 = []rune(strings.ToLower(e.StrSecond))
+		str1Len = len(r1)
+		str2Len = len(r2)
+	)
 	e.dimension = Make2Dim(str1Len +1 , str2Len +1)
 
 	// fmt.Println(r1)
@@ -60,7 +61,6 @@ func (e *EditDistance) Distance() int {
 			e.dimension[i+1][j+1] = e.MinCost(i, j , cost)
 		}
 	}
-	// fmt.Println(e.dimension)
 	return e.dimension[str1Len][str2Len]
 }
 
