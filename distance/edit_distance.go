@@ -64,45 +64,56 @@ func (e *EditDistance) Distance() int {
 	return e.dimension[str1Len][str2Len]
 }
 
-func (e *EditDistance) Print() {
-	cols := strings.Split(" "+e.StrSecond, "")
-	row := strings.Split(" "+e.StrFirst, "")
-	
-	blue := color.New(color.FgBlue , color.Bold)	
-	green := color.New(color.FgGreen)
-	red := color.New(color.FgRed, color.Bold).Add(color.BgWhite)
+func stringToArray(str string) []string{
+	return strings.Split(str, "")
+}
 
-	write := color.New(color.FgWhite)
-	fmt.Print(" ")
-	blue.Printf("%v\n",cols)
+func (e *EditDistance) Print() {
 	
+	var (
+		strCols = stringToArray(" "+e.StrSecond)
+		strRows = stringToArray(" "+e.StrFirst)
+		blue = color.New(color.FgBlue , color.Bold)	
+		green = color.New(color.FgGreen)
+		red = color.New(color.FgRed, color.Bold).Add(color.BgHiWhite)
+		write = color.New(color.FgWhite)
+	)
+
+	fmt.Print(" ")
+	blue.Printf("%v\n",strCols)
+
 	dim := e.dimension
-	for i:= range iter.N(len(row)) {
-		blue.Print(row[i])
+	for i:= range iter.N(len(strRows)) {
+		// first chr is blue color
+		blue.Print(strRows[i])
+
+
+		// first element in array is green color
 		if( i == 0 ){
 			green.Printf("%v\n", dim[i])
-		}else{
-			arrcol := dim[i]
+			continue
+		}
 
-			var printcolor *color.Color
-			if i == len(dim)-1{
-				printcolor = red
-			}else{
-				printcolor = write
-			}
+		// set color when corner right bottom martix is red color orther write color
+		var printcolor *color.Color = write
+		if i == len(dim)-1{
+			printcolor = red
+		}
 
-			for j := range arrcol{
-				switch j {
-				case 0 : 
-					green.Printf("[%d ", arrcol[j])
-				case len(arrcol) -1 :
-					printcolor.Printf("%d", arrcol[j])
-					fmt.Println("]") 
-				default : 
-					fmt.Printf("%d ",arrcol[j])
-				}
+		arrcol := dim[i]
+		for j := range arrcol{
+			v := arrcol[j]
+			switch j {
+			case 0 : 
+				green.Printf("[%d ", v)
+			case len(arrcol) -1 :
+				printcolor.Printf("%d", v)
+				green.Println("]") 
+			default : 
+				write.Printf("%d ",v)
 			}
 		}
+		
 	}
 }
 
